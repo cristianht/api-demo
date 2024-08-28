@@ -1,20 +1,27 @@
 package com.example.demo.dto;
 
+import com.example.demo.entity.Student;
+
+import javax.validation.constraints.Digits;
+
 public class StudentDTO {
 
-    private String id;
     private String firstname;
     private String lastname;
     private String email;
     private String phone;
     private Boolean active;
 
-    public String getId() {
-        return id;
-    }
+    public Student toEntity() {
+        Student entity = new Student();
 
-    public void setId(String id) {
-        this.id = id;
+        entity.setFirstname(this.firstname);
+        entity.setLastname(this.lastname);
+        entity.setEmail(this.email);
+        entity.setPhone(this.phone);
+        entity.setActive(this.active);
+
+        return entity;
     }
 
     public String getFirstname() {
