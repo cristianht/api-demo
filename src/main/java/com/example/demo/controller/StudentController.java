@@ -1,12 +1,17 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.StudentDTO;
 import com.example.demo.entity.Student;
 import com.example.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/apidemo/v1")
@@ -15,20 +20,25 @@ public class StudentController {
     @Autowired
     StudentService studentService;
 
-    @RequestMapping(value = "/students", method = RequestMethod.GET)
-    public String getStudents() {
-        return "Esta es la lista de estudiantes";
+    //@RequestMapping(value = "/students", method = RequestMethod.GET)
+    @GetMapping("/students")
+    public ResponseEntity<List<StudentDTO>> getStudents() {
+        List<StudentDTO> students = this.studentService.getStudents();
+        return ResponseEntity.ok(students);
     }
 
     @RequestMapping(value = "/students/{id}", method = RequestMethod.GET)
-    public String getStudent(Long id) {
-        return "Este es el estudiante con id " + id;
+    public ResponseEntity<StudentDTO> getStudent(@NotNull @PathVariable("id") Long id) {
+        StudentDTO studentDTO = this.studentService.getStudent(id);
+        return ResponseEntity.ok(studentDTO);
     }
 
     @RequestMapping(value = "/students", method = RequestMethod.POST)
-    public String addStudent(@RequestBody Student student) {
-        this.studentService.addStudent(student);
-        return "Estudiante añadido con id " + student.getId() + "";
+    public ResponseEntity<StudentDTO> addStudent(@Valid @RequestBody StudentDTO studentDTO) {
+        Long idEntity = this.studentService.addStudent(studentDTO);
+        return ResponseEntity.created(URI.create("/students/" + idEntity))
+                .body(studentDTO);
+        //return ResponseEntity.status(HttpStatus.CREATED).body(student);
     }
 
     @RequestMapping(value = "/students/{id}", method = RequestMethod.PUT)
@@ -37,8 +47,9 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/students/{id}", method = RequestMethod.DELETE)
-    public String deleteStudent(Long id) {
-        return "Estudiante con id " + id + " eliminado";
+    public ResponseEntity deleteStudent(@NotNull @PathVariable("id") Long id) {
+        this.studentService.deleteStudent(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

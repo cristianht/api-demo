@@ -38,7 +38,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BussinessException.class)
-    public ResponseEntity<Object> handleUserEmailExistsException(
+    public ResponseEntity<Object> handleBussinessException(
             BussinessException ex, WebRequest request
     ) {
         Map<String, Object> responseBody = new LinkedHashMap<>();

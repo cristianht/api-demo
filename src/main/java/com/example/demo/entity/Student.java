@@ -1,6 +1,9 @@
 package com.example.demo.entity;
 
+import com.example.demo.dto.StudentDTO;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="STUDENT")
@@ -20,6 +23,16 @@ public class Student {
     private String phone;
     @Column(nullable = false)
     private Boolean active;
+
+    public StudentDTO toDTO() {
+        StudentDTO dto = new StudentDTO();
+        dto.setFirstname(this.firstname);
+        dto.setLastname(this.lastname);
+        dto.setEmail(this.email);
+        dto.setPhone(this.phone);
+        dto.setActive(this.active);
+        return dto;
+    }
 
     public Long getId() {
         return id;

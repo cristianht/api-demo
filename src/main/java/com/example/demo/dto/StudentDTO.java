@@ -1,13 +1,19 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.Student;
+import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+@Component
 public class StudentDTO {
 
+    @NotBlank(message = "Firstname is required")
     private String firstname;
+    @NotBlank(message = "Lastname is required")
     private String lastname;
+    @NotBlank(message = "Email is required")
     private String email;
     private String phone;
     private Boolean active;
